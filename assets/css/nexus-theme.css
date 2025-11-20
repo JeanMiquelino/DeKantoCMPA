@@ -1,0 +1,178 @@
+/*
+ * DeKanto Theme - Estilo Principal
+ * Inspirado na estética moderna e escura de ferramentas como n8n.
+ */
+
+ :root {
+    --background-dark: #101118; /* Um azul quase preto para o fundo */
+    --surface-color: #1a1b26;   /* Um tom mais claro para cartões e elementos de superfície */
+    --border-color: #313346;    /* Cor subtil para bordas */
+    --text-primary: #e1e1e6;    /* Cor principal para texto, branco suave */
+    --text-secondary: #8c8fa6;  /* Cor secundária para legendas e textos de apoio */
+    --gradient-primary: linear-gradient(90deg, #e94a80 0%, #be4fe9 100%); /* Gradiente vibrante para ações */
+    --gradient-primary-hover: linear-gradient(90deg, #f05a8d 0%, #c962f0 100%);
+    --color-success: #28a745;
+    --color-warning: #ffc107;
+    --color-danger: #dc3545;
+    --color-info: #17a2b8;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* --- Componentes Reutilizáveis --- */
+
+.page-title {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.card-theme {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.table-theme {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-color: var(--text-primary);
+    --bs-table-border-color: var(--border-color);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04);
+}
+
+.table thead th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    border-bottom-width: 1px;
+}
+
+.form-control-theme, .form-select-theme {
+    background-color: var(--background-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control-theme:focus, .form-select-theme:focus {
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    border-color: #8a4fe9;
+    box-shadow: 0 0 0 3px rgba(190, 79, 233, 0.2);
+    outline: none;
+}
+
+.form-label-theme {
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.btn-gradient {
+    background: var(--gradient-primary);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    background: var(--gradient-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(190, 79, 233, 0.25);
+    color: white;
+}
+
+.btn-secondary-theme {
+    background-color: #313346;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+}
+
+.btn-secondary-theme:hover {
+    background-color: #41445c;
+    color: var(--text-primary);
+    border-color: #41445c;
+}
+
+.status-badge {
+    border-radius: 6px;
+    font-size: 0.8em;
+    padding: 0.4em 0.8em;
+    font-weight: 600;
+}
+
+/* Navbar Personalizado */
+.navbar-theme {
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+}
+
+.navbar-theme .navbar-brand img {
+    border-radius: 50%;
+}
+
+.navbar-theme .navbar-brand span {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.navbar-theme .nav-link {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.navbar-theme .nav-link:hover,
+.navbar-theme .nav-link.active {
+    color: var(--text-primary);
+}
+
+.navbar-theme .dropdown-menu {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.navbar-theme .dropdown-item {
+    color: var(--text-secondary);
+}
+
+.navbar-theme .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+}
+
+/* Toast Container */
+.toast-container {
+    z-index: 1090;
+}

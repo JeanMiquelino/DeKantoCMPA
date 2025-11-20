@@ -1,0 +1,154 @@
+/* Kanban (Dekanto Matrix) — Light theme aligned to nexus.css */
+
+/* Layout */
+body { overflow-x: hidden; }
+#kanban-board { display:flex; gap:1.2rem; align-items:flex-start; overflow-x:auto; padding-bottom:1rem; scroll-snap-type:x proximity; }
+#kanban-board::-webkit-scrollbar{ height:10px; }
+#kanban-board::-webkit-scrollbar-track{ background:#eee; border-radius:10px; }
+#kanban-board::-webkit-scrollbar-thumb{ background:#cfcfcf; border-radius:10px; }
+
+/* Viewport offset so columns reach the footer */
+:root { --kanban-offset: 120px; }
+@media (max-width: 992px){ :root { --kanban-offset: 140px; } }
+@media (max-width: 576px){ :root { --kanban-offset: 156px; } }
+
+/* Columns */
+.kanban-column{
+  min-width:340px; width:340px; flex:0 0 auto; display:flex; flex-direction:column;
+  /* Fill viewport minus navbar/top paddings */
+  height: calc(100vh - var(--kanban-offset));
+  /* Remove previous hard cap */
+  /* max-height:calc(100vh - 210px); */
+  scroll-snap-align:start; position:relative;
+  border:1px solid var(--matrix-border);
+  background: var(--matrix-surface);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.03), 0 4px 14px -2px rgba(0,0,0,.06);
+  transition:.3s; border-radius:1rem;
+}
+.kanban-column:hover{ box-shadow:0 0 0 1px var(--matrix-primary), 0 6px 18px -4px rgba(0,0,0,.12); }
+
+/* Phase header accent (keeps distinct colors) */
+.kanban-column[data-phase="requisicao"] .column-header{ --grad:linear-gradient(120deg,#ffebc2,#fff3cd); }
+.kanban-column[data-phase="cotacao"]   .column-header{ --grad:linear-gradient(120deg,#cfe8ff,#e6f4ff); }
+.kanban-column[data-phase="proposta"]   .column-header{ --grad:linear-gradient(120deg,#e2d6ff,#ede9fe); }
+.kanban-column[data-phase="pedido"]     .column-header{ --grad:linear-gradient(120deg,#d1fae5,#e7fff6); }
+
+.column-header{
+  padding:.75rem .95rem; font-weight:600; letter-spacing:.5px; text-transform:uppercase; font-size:.68rem;
+  display:flex; justify-content:space-between; align-items:center;
+  background: var(--grad, linear-gradient(120deg, rgba(181,168,134,.14), rgba(181,168,134,.06)));
+  border-bottom:1px solid var(--matrix-border);
+  border-top-left-radius:1rem; border-top-right-radius:1rem; position:sticky; top:0; z-index:5;
+  box-shadow:0 2px 4px -2px rgba(0,0,0,.07); color: var(--matrix-text-primary);
+}
+.column-header .title-wrap{ display:flex; align-items:center; gap:.5rem; }
+.column-header .icon-badge{ width:30px;height:30px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.06); border-radius:.7rem; font-size:1rem; color: var(--matrix-text-primary); }
+.count-pill{ background:rgba(0,0,0,.05); padding:.25rem .55rem; border-radius:2rem; font-size:.6rem; font-weight:600; letter-spacing:.5px; display:inline-flex; align-items:center; gap:.35rem; color: var(--matrix-text-secondary); border:1px solid var(--matrix-border); }
+.count-pill i{ font-size:.75rem; opacity:.6; }
+
+/* Column body */
+.kanban-scroll{ overflow-y:auto; padding:.75rem .75rem 1.1rem; scrollbar-width:thin; flex: 1 1 auto; }
+.kanban-scroll::-webkit-scrollbar{ width:7px; }
+.kanban-scroll::-webkit-scrollbar-track{ background:transparent; }
+.kanban-scroll::-webkit-scrollbar-thumb{ background:#d6d6d6; border-radius:8px; }
+
+/* Cards */
+.kanban-card{
+  background: var(--matrix-surface); color: var(--matrix-text-primary);
+  border:1px solid var(--matrix-border); border-radius:.85rem; padding:.75rem .8rem .75rem; margin-bottom:.75rem;
+  position:relative; cursor:grab; transition:.25s cubic-bezier(.4,.2,.3,1); display:flex; flex-direction:column; gap:.45rem;
+  box-shadow:0 2px 4px -2px rgba(0,0,0,.06); min-height:130px;
+}
+.kanban-card .d-flex.justify-content-between.align-items-start{ flex-grow:1; }
+.kanban-card:hover{ border-color:var(--matrix-primary); background:#fff; transform:translateY(-2px); box-shadow:0 6px 14px -4px rgba(0,0,0,.12), 0 0 0 1px rgba(181,168,134,.18); }
+.kanban-card.dragging{ opacity:.65; rotate:1deg; box-shadow:0 8px 24px -6px rgba(0,0,0,.18); }
+
+/* Drag helpers */
+.drag-placeholder{ border:2px dashed var(--matrix-primary); border-radius:.85rem; margin-bottom:.7rem; background:repeating-linear-gradient(45deg,#f8f8f8 0,#f8f8f8 6px,#f1f1f1 6px,#f1f1f1 12px); height:72px; animation:pulse 1.2s ease-in-out infinite; position:relative; }
+@keyframes pulse{ 0%,100%{opacity:.7} 50%{opacity:1} }
+.drop-target{ outline:2px dashed var(--matrix-primary); outline-offset: -4px; }
+
+/* Status chip (neutral base + variants) */
+.status-chip{ display:inline-flex; align-items:center; gap:4px; font-size:.58rem; letter-spacing:.6px; text-transform:uppercase; padding:3px 7px 3px 6px; border-radius:1rem; font-weight:600; position:relative; background:rgba(0,0,0,.04); border:1px solid var(--matrix-border); color:var(--matrix-text-secondary); }
+.status-chip[data-color="warning"]{ background:rgba(245,166,35,.14); border-color:rgba(245,166,35,.35); color:#7a4a00; }
+.status-chip[data-color="info"]{ background:rgba(147,22,33,.10); border-color:rgba(147,22,33,.30); color:var(--matrix-tertiary); }
+.status-chip[data-color="secondary"]{ background:rgba(0,0,0,.04); border-color:var(--matrix-border); color:var(--matrix-text-secondary); }
+.status-chip[data-color="success"]{ background:rgba(46,125,50,.10); border-color:rgba(46,125,50,.30); color:var(--matrix-success); }
+/* Pedido specific colors */
+.status-chip[data-color="emitido"]{ background:rgba(255,193,7,.18); border-color:rgba(255,193,7,.55); color:#7a5a00; }
+.status-chip[data-color="pendente"]{ background:rgba(13,110,253,.14); border-color:rgba(13,110,253,.40); color:#0f3c9f; }
+.status-chip[data-color="em_producao"]{ background:rgba(99,102,241,.14); border-color:rgba(99,102,241,.40); color:#3b3fbe; }
+.status-chip[data-color="enviado"]{ background:rgba(13,202,240,.14); border-color:rgba(13,202,240,.40); color:#0c7ea1; }
+.status-chip[data-color="entregue"]{ background:rgba(16,185,129,.14); border-color:rgba(16,185,129,.40); color:#0f7f5e; }
+.status-chip[data-color="cancelado"]{ background:rgba(220,53,69,.14); border-color:rgba(220,53,69,.45); color:#7f1d22; }
+
+/* Pedido card top-accent by status */
+.kanban-card[data-entity="pedido"]{ position:relative; }
+.kanban-card[data-entity="pedido"]::before{ content:""; position:absolute; top:0; left:0; right:0; height:4px; border-top-left-radius:.85rem; border-top-right-radius:.85rem; background:var(--pedido-accent,transparent); }
+.kanban-card[data-entity="pedido"][data-status="emitido"]{ --pedido-accent:#ffb347; }
+.kanban-card[data-entity="pedido"][data-status="pendente"]{ --pedido-accent:#4f46e5; }
+.kanban-card[data-entity="pedido"][data-status="em_producao"]{ --pedido-accent:#6366f1; }
+.kanban-card[data-entity="pedido"][data-status="enviado"]{ --pedido-accent:#0dcaf0; }
+.kanban-card[data-entity="pedido"][data-status="entregue"]{ --pedido-accent:#16a34a; }
+.kanban-card[data-entity="pedido"][data-status="cancelado"]{ --pedido-accent:#dc3545; filter:grayscale(.15); opacity:.95; }
+.kanban-card[data-entity="pedido"][data-status="cancelado"] .small, .kanban-card[data-entity="pedido"][data-status="cancelado"] .status-chip{ text-decoration:line-through; }
+
+/* Column footer / Add button */
+.column-footer{ padding:.65rem .8rem; border-top:1px solid var(--matrix-border); background: var(--matrix-surface); border-bottom-left-radius:1rem; border-bottom-right-radius:1rem; }
+.add-card-btn{
+  display:flex; align-items:center; justify-content:center; gap:.45rem; width:100%; font-size:.7rem; letter-spacing:.5px; text-transform:uppercase;
+  padding:.65rem .9rem; border-radius:.75rem; font-weight:600;
+  background: var(--matrix-primary); color:#222; border:1px solid var(--matrix-primary);
+  box-shadow:0 2px 6px -2px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04); transition:.25s;
+}
+.add-card-btn i{ font-size:.85rem; }
+.add-card-btn:hover{ background: var(--matrix-primary-light); color:#222; box-shadow:0 4px 12px -4px rgba(0,0,0,.16),0 0 0 1px rgba(181,168,134,.25); transform:translateY(-1px); }
+.add-card-btn:active{ transform:translateY(0); box-shadow:0 2px 6px -2px rgba(0,0,0,.12),0 0 0 1px rgba(181,168,134,.20); }
+
+/* === New: Sticky filters + quick legend, actions, fade-in, responsive === */
+.sticky-top-kanban{ position: sticky; top: 56px; z-index: 7; background: var(--matrix-bg); border-bottom: 1px solid var(--matrix-border); padding-top:.25rem; margin-bottom:.5rem; }
+@media (max-width: 576px){ .sticky-top-kanban{ top: 50px; } }
+
+.kanban-filters .input-group-text{ background:#fff; }
+.quick-legend{ display:flex; gap:.6rem; flex-wrap:wrap; color:var(--matrix-text-secondary); font-size:.8rem; }
+.quick-legend span{ display:inline-flex; align-items:center; gap:.3rem; padding:.25rem .5rem; border:1px solid var(--matrix-border); border-radius:.5rem; background:#fff; }
+
+/* Footer and actions inside card */
+.kanban-card .kanban-card-footer{ margin-top:auto; display:flex; justify-content:flex-start; }
+.kanban-card .card-actions{ display:flex; flex-wrap:wrap; gap:.25rem; margin-top:.4rem; }
+.kanban-card .btn.btn-action{
+  --size:28px;
+  width:var(--size); height:var(--size);
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid var(--matrix-border);
+  background:#fff; color:var(--matrix-text-secondary);
+  border-radius:.55rem; padding:0;
+  transition:.15s ease-in-out; box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.kanban-card .btn.btn-action:hover,
+.kanban-card .btn.btn-action:focus{
+  color:var(--matrix-text-primary);
+  border-color:var(--matrix-primary);
+  background:rgba(181,168,134,.10);
+  box-shadow:0 0 0 3px rgba(181,168,134,.20);
+}
+.kanban-card .btn.btn-action:disabled{ opacity:.6; box-shadow:none; }
+
+/* Fade-in animation (used on columns) */
+.fade-in{ animation:kanban-fade .25s ease-out both; }
+@keyframes kanban-fade{ from{opacity:0; transform:translateY(2px);} to{opacity:1; transform:none;} }
+
+/* Responsive */
+@media (max-width: 768px){
+  .kanban-column{ min-width: 300px; width:300px; /* height already set via var --kanban-offset */ }
+}
+@media (max-width: 576px){
+  #kanban-board{ gap:.8rem; padding-bottom:.75rem; }
+  .kanban-column{ min-width: 280px; width:280px; }
+  .column-header{ position: sticky; top: 0; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .kanban-column, .kanban-card, .add-card-btn, .fade-in{ transition: none !important; animation: none !important; }
+}
